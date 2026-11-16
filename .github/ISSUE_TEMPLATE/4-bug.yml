@@ -1,0 +1,16 @@
+name: Bug
+description: Something in the game or the check is broken.
+title: "Bug: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What you did, what you expected, what happened
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Where (floor, room) and your setup
+      placeholder: "floor 4, LEFT room; Windows, pygame-ce 2.5.8"

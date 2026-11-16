@@ -1,0 +1,22 @@
+name: Rule proposal
+description: Change how the whole game works (lifts, robots, the code, the clock). The maintainer decides.
+title: "Rule: "
+labels: ["rule"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened, or what's wrong
+      description: What you did, and what the game did. ("I drove the lift up, fell off, and it stayed up.")
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you'd do
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: What else you considered, and what it would change for other floors

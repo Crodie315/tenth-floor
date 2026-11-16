@@ -1,0 +1,23 @@
+name: Engine request
+description: Your floor needs something the engine or kit does not do (a door, a new hazard). Goes to that piece's owner (OWNERS.md).
+title: "Engine: "
+labels: ["engine"]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What your floor needs
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: Could it live inside your floor file instead?
+      description: Most things can (see SweepBeam in floors/example_floor.py). Say why yours can't.
+  - type: dropdown
+    id: who
+    attributes:
+      label: Who makes it
+      options:
+        - I'll make it, in a pull request to that piece
+        - Please make it for me

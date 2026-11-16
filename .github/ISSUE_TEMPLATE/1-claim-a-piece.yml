@@ -1,0 +1,35 @@
+name: Claim a piece
+description: Take ownership of a piece of the game - your floor, a kit part, or a game piece (see OWNERS.md).
+title: "Claim: "
+labels: ["claim"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of piece
+      options:
+        - My floor (a real place in the building)
+        - A kit part that's already there
+        - A new kit part I'll make
+        - A game piece (movement, security, screens, the lobby, the kit's frame)
+    validations:
+      required: true
+  - type: input
+    id: piece
+    attributes:
+      label: Which one
+      description: The place for a floor ("3D printing lab"), or the piece's name from OWNERS.md ("Kit Crusher", "Screens"), or your new part ("Kit Rug").
+    validations:
+      required: true
+  - type: input
+    id: github
+    attributes:
+      label: Your GitHub username
+      placeholder: "@your-name"
+    validations:
+      required: true
+  - type: textarea
+    id: plan
+    attributes:
+      label: What you'll do with it
+      description: For a floor, your rooms west to east. For a piece, what you'd improve first.
