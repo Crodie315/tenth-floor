@@ -75,7 +75,7 @@ class SecurityDesk(Room):
             "After hours. MFA Computer Arts is on floor 10, and its door takes a code.",
             "Every floor hides one digit. Hold UP at furniture to search it.",
             "West elevator: the basement up to 9. East elevator, to the right: here to the top.",
-            "Walk across a floor to switch elevators.   <-- this way")]
+            "Walk across a floor to switch elevators.   <-- West      East -->")]
 
     def draw_background(self, surf):
         surf.fill((44, 48, 60))
