@@ -8,8 +8,8 @@ including 10. So the only way up to 10 is across at least one floor.
 Floors are found by file: every floors/<name>.py with its ROOMS (or LEFT and RIGHT) is in the game. Nobody edits
 this file to add a floor, so a whole class can add floors at once without a merge conflict here.
 The building has 12 floors (TOP_FLOOR) and a basement: the lobby on 1, MFA Computer Arts on 10, and 2 to 9,
-11 and 12 for floors. The basement (B) holds the floor pinned to it in ASSIGN, reached only by the West
-elevator; the East elevator doesn't go down there, so its last room is a dead end. Floors listed in ASSIGN go where they're told. The rest fill 2 to 9, then 11 and 12, in
+11 and 12 for floors. The basement (B) holds the floors pinned to it in ASSIGN (two can share it), reached only by
+the West elevator; the East elevator doesn't go down there, so its last room is a dead end. Floors listed in ASSIGN go where they're told. The rest fill 2 to 9, then 11 and 12, in
 alphabetical order of file name. The example floors only take a floor nobody else has, so they leave the
 building as it fills (they still run with main.py --floor). A student's floor is never left out: if there
 are more of them than floors, the building grows past 12 to fit them.
@@ -29,8 +29,9 @@ PIECES_NEEDED = 8        # keycard pieces that unlock it (capped at the number o
 FLOOR_NAMES = {1: "Lobby / Flatiron Gallery", GOAL: "MFA Computer Arts"}
 
 # Pin a floor file to a floor number: "file_name": 4. Everyone else is placed in order.
-# The basement (0) is only used by a floor pinned here.
-ASSIGN = {"basement_library": BASEMENT}
+# The basement (0) is only used by floors pinned here. Two files pinned to the same number share that
+# floor, west to east in the order listed: the library by the West elevator, then Mo's Cafe.
+ASSIGN = {"basement_library": BASEMENT, "mos_cafe": BASEMENT}
 
 
 class Floor:
@@ -57,6 +58,27 @@ def load_floors(only=None):
             found[info.name] = Floor(info.name, mod)
         except Exception as e:  # noqa: BLE001 - a student's floor must not take the game down
             print(f"[skipped floor {info.name}: {type(e).__name__}: {e}]")
+    return join_shared(found)
+
+
+def join_shared(found):
+    """Files pinned to the same floor number become one floor: their rooms west to east in ASSIGN order,
+    both names on the panel, both authors. Each file still hides its own digit, and each one counts."""
+    by_number = {}
+    for f, n in ASSIGN.items():
+        if f in found:
+            by_number.setdefault(n, []).append(f)
+    for n, files in by_number.items():
+        if len(files) < 2:
+            continue
+        parts = [found.pop(f) for f in files]
+        shared = parts[0]
+        shared.file = "+".join(files)
+        shared.name = " + ".join(p.name for p in parts)
+        shared.author = " & ".join(p.author for p in parts)
+        shared.room_classes = [c for p in parts for c in p.room_classes]
+        shared.pin = n
+        found[shared.file] = shared
     return found
 
 
@@ -72,7 +94,9 @@ def open_floors():
 def place(floors):
     """Returns {floor_number: file_name}."""
     where = {}
-    for name, number in ASSIGN.items():
+    pins = dict(ASSIGN)
+    pins.update({name: fl.pin for name, fl in floors.items() if getattr(fl, "pin", None) is not None})
+    for name, number in pins.items():
         if name in floors and number not in (1, GOAL):
             where[number] = name
     left = [n for n in floors if n not in where.values()]
