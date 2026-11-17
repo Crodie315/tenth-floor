@@ -58,7 +58,7 @@ class GalleryHall(Room):
 
 
 class SecurityDesk(Room):
-    """Right of the lobby: where the game starts. No East elevator here; the wall is solid."""
+    """Right of the lobby: where the game starts. The East elevator is through its right edge."""
 
     title = "Security Desk"
 
@@ -74,7 +74,7 @@ class SecurityDesk(Room):
         self.lines = [small.render(t, True, (200, 204, 214)) for t in (
             "After hours. MFA Computer Arts is on floor 10, and its door takes a code.",
             "Every floor hides one digit. Hold UP at furniture to search it.",
-            "The West elevator stops from here to 9; the East one from 2 up, and at 10.",
+            "West elevator: the basement up to 9. East elevator, to the right: here to the top.",
             "Walk across a floor to switch elevators.   <-- this way")]
 
     def draw_background(self, surf):
